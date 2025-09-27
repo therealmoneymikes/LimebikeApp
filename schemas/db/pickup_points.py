@@ -26,3 +26,6 @@ class DBPickUpPointDelete(BaseModel):
     
 class PickUpPointDeleteOut(DBPickUpPoint):
     pass
+
+    class Config:
+        orm_mode = True
