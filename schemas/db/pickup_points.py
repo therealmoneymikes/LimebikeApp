@@ -6,14 +6,14 @@ from pydantic import BaseModel
 
 
 
-class PickUpPoint(BaseModel):
+class DBPickUpPoint(BaseModel):
     id: str
     name: str
     capacity: int
     location: tuple[float, float]
 
 
-class PickUpPointOut(BaseModel):
+class DBPickUpPointOut(BaseModel):
     name: str
     location: tuple[float, float]
     
@@ -21,8 +21,8 @@ class PickUpPointOut(BaseModel):
         orm_mode = True
         
 
-class PickUpPointDelete(BaseModel):
+class DBPickUpPointDelete(BaseModel):
     id: str
     
-class PickUpPointDeleteOut(PickUpPoint):
+class PickUpPointDeleteOut(DBPickUpPoint):
     pass
