@@ -1,0 +1,18 @@
+What it does:
+
+Takes a Shapely geometry object (e.g., Point, Polygon, LineString)
+
+Converts it into a WKBElement object that SQLAlchemy/GeoAlchemy2 understands
+
+This WKBElement can be directly assigned to a Geography or Geometry column in your SQLAlchemy model
+
+🔑 Why do we need it?
+
+PostGIS columns (Geography, Geometry) don’t accept plain tuples or Shapely objects.
+They expect something serializable to PostGIS formats (WKB or WKT).
+
+Shapely → Python library for geometry objects (in memory).
+
+from_shape → bridges Shapely ↔ GeoAlchemy2 ↔ PostGIS.
+
+It wraps your Shapely geometry into the type that SQLAlchemy can insert into the DB.
