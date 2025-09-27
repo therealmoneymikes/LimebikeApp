@@ -6,7 +6,7 @@ authors = [
     {name = "Michael Roberts - CSAcademyIO",email = "m.roberts94@hotmail.co.uk"}
 ]
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10, < 4.0"
 dependencies = [
     "pydantic (>=2.11.9,<3.0.0)",
     "sqlalchemy (>=2.0.43,<3.0.0)",
@@ -22,7 +22,8 @@ dependencies = [
     "grpcio-reflection (>=1.75.1,<2.0.0)",
     "python-multipart (>=0.0.20,<0.0.21)",
     "python-jose[cryptography] (>=3.5.0,<4.0.0)",
-    "passlib[brcrypt] (>=1.7.4,<2.0.0)"
+    "passlib[brcrypt] (>=1.7.4,<2.0.0)",
+    "geoalchemy2 (>=0.18.0,<0.19.0)"
 ]
 
 

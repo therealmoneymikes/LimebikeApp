@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID, ENUM, TIMESTAMP
 from sqlalchemy.sql import func
 from sqlalchemy import Column, String, Enum, UUID, Float, DateTime
 import enum
-
+from geoalchemy2 import Geography
 
 #For  Cross-DB / multi-dialect backend → use sqlalchemy-utils UUIDType:
 #binary=True option can store as 16-byte binary in DB for efficiency.
@@ -62,6 +62,30 @@ class Bike(Base):
 """
     id = Column(UUID(as_uuid=True), unique=True)
     bike_type = Column(Enum(BikeTypeEnum), nullable=False)
-    longitude = Column(Float, nullable=False)
-    latitude = Column(Float, nullable=False)
     commissioned_date = Column(TIMESTAMP, nullable=False, server_default=func.now())
+    """ 
+    location from geoalchemy2 allows for nearest bike logic
+    -- Find bikes within 500 meters of a point
+    SELECT *
+    FROM bikes
+    WHERE ST_DWithin(location, ST_MakePoint(-0.1257, 51.5085)::geography, 500);
+    ✅ Handles distances, polygons, routes, clustering, etc.
+    ⚠️ Slightly more setup (must enable PostGIS extension).
+    
+    
+    For your Lime-bike app, POINT is ideal for each bike; LINESTRING might be used for trips, and POLYGON for operational zones.
+    
+    
+    SRID = Spatial Reference System Identifier
+    SRID 4326 tells PostGIS: “these coordinates are in standard GPS coordinates, not meters or feet.”
+    but planar SRIDs like 3857 are in meters.
+    
+    
+    4️⃣ spatial_index=True
+    Creates a GiST index on your geometry column. Why? Makes spatial queries fast:
+    Without a spatial index, PostGIS would scan every row, which is slow with thousands of bikes.
+
+    GiST indexes are specialized for geometric data, optimized for nearest neighbor and distance queries.
+    """
+    # POINT represents a single coordinate in space: (longitude, latitude).
+    location = Column(Geography(geometry_type="POINT", srid=4326, spatial_index=True, nullable=False))
