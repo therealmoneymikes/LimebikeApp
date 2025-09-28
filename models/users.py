@@ -24,16 +24,16 @@ import uuid
 """
 
 
-def generate_user_id(email: str) -> uuid.UUID:
-    return uuid.uuid5(namespace=namespaces.USER_UUID_NAMESPACE, name=email)
     
 
-class Users(Base):
+class User(Base):
     __tablename__ = "users"
    
     id = Column(UUID(as_uuid=True), primary_key=True)
     email = Column(String, unique=True, nullable=False)
-    name = Column(String, nullable=False)
+    first_name = Column(String, nullable=False)
+    surname = Column(String, nullable=False)
+    password = Column(String, nullable=False)
     phone_number = Column(String, unique=True, nullable=True) #Raw Phone number
     phone_number_normalized = Column(String, unique=True, nullable=True) #Digits Only
     

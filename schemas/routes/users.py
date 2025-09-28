@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel
-
+from uuid import UUID
 
 
 
@@ -11,6 +11,7 @@ class UserBase:
     first_name: str
     surname: str
     phone_number: str
+    password: str
 class UserCreate(UserBase):
     pass
 
@@ -29,11 +30,23 @@ class UserCreateOut(BaseModel):
         orm_mode = True
 
 
+class UserRead(BaseModel):
+    email: str
+    password: str
+
+class UserReadOut(BaseModel):
+    # as_uuid=True means SQLAlchemy will store it as PostgreSQL uuid type but return it as a Python uuid.UUID object in your ORM model.
+    id: UUID
+    email: str
+    first_name: str
+    surname: str
+    phone_number_normalized: str
+
 class UserUpdate(BaseModel):
-    email: Optional[str]
-    first_name: Optional[str]
-    surname: Optional[str]
-    phone_number: Optional[str]
+    email:str
+    first_name:str
+    surname:str
+    phone_number:str
     
 
 class UserUpdateOut(UserUpdate):

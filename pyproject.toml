@@ -24,7 +24,9 @@ dependencies = [
     "python-jose[cryptography] (>=3.5.0,<4.0.0)",
     "passlib[brcrypt] (>=1.7.4,<2.0.0)",
     "geoalchemy2 (>=0.18.0,<0.19.0)",
-    "dynaconf (>=3.2.11,<4.0.0)"
+    "dynaconf (>=3.2.11,<4.0.0)",
+    "phonenumbers (>=9.0.15,<10.0.0)",
+    "bcrypt (>=5.0.0,<6.0.0)"
 ]
 
 

@@ -1,0 +1,20 @@
+Error Types Quick Reference:
+Error TypeCommon CausesWhen to ExpectIntegrityErrorUnique constraints, foreign keys, not nullMost common - data validation issuesDataErrorWrong data types, too long stringsBad input dataOperationalErrorDatabase down, permissions, disk fullInfrastructure issuesTimeoutErrorSlow queries, deadlocksPerformance/concurrency issuesDisconnectionErrorNetwork issues, DB restartConnection problemsInvalidRequestErrorWrong SQLAlchemy usageCode bugsStatementErrorSQL compilation/executionQuery construction issues
+
+from sqlalchemy.exc import (
+    SQLAlchemyError,      # ✅ Built-in - Base class
+    IntegrityError,       # ✅ Built-in - Constraint violations
+    DataError,           # ✅ Built-in - Invalid data format
+    OperationalError,    # ✅ Built-in - Database operation failed
+    InvalidRequestError, # ✅ Built-in - Wrong SQLAlchemy usage
+    StatementError,      # ✅ Built-in - SQL statement problems
+    DisconnectionError,  # ✅ Built-in - Connection lost
+    TimeoutError         # ✅ Built-in - Operation timeout
+)
+
+# You can use these immediately:
+try:
+    await db.execute(query)
+except IntegrityError:
+    # This works out of the box
+    pass
