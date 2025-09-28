@@ -17,7 +17,7 @@ class DBUserLoginOut(BaseModel):
     access_token: str
 
 
-class DBUserSignUp(BaseModel):
+class DBUserCreate(BaseModel):
     email: str
     password: str
     first_name: str
@@ -27,7 +27,7 @@ class DBUserSignUp(BaseModel):
     phone_number_normalized: str
 
 
-class DBUserSignUpOut(BaseModel):
+class DBUserCreateOut(BaseModel):
     email: str
     first_name: str
     surname: str

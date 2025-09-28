@@ -1,0 +1,24 @@
+
+
+
+
+[default]
+[database]
+PORT = 5432
+COCKROACH_DB_PORT = 26257
+HOST = "localhost"
+USER = "dbuser"
+PASSWORD = "dbpass"
+NAME= "limebikemain"
+
+[development.database]
+PORT = 5432
+
+
+[staging.database]
+PORT = 6000
+
+[production.database]
+PORT = 5432
+COCKROACH_DB_PORT = 26257
+COCKROACH_DB_ADMIN_UI = 8080
