@@ -3,6 +3,13 @@
 
 
 [default]
+
+[jwt]
+SECRET_JEY = "super-secret"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRY_MINUTES = 30
+
+
 [database]
 PORT = 5432
 COCKROACH_DB_PORT = 26257
@@ -10,6 +17,7 @@ HOST = "localhost"
 USER = "dbuser"
 PASSWORD = "dbpass"
 NAME= "limebikemain"
+
 
 [development.database]
 PORT = 5432

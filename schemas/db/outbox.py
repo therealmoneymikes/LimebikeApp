@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any
 from pydantic import BaseModel
 
-from backend.models.enums import AggregateType, OutboxEventStatus
+from backend.utils.model_enums import AggregateType, OutboxEventStatus
 
 
 

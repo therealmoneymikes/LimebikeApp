@@ -64,3 +64,11 @@ class DBUserUpdateOut(BaseModel):
     
     class Config:
         orm_mode = True
+        
+        
+class DBUserDeleteOut(BaseModel):
+    id: UUID 
+    first_name: str
+    surname: str
+    email: str
+    phone_number: str

@@ -1,0 +1,57 @@
+
+
+JWT = data format
+JWS = signed JWT (signature prevents tampering)
+JWK = JSON representation of a public key
+JWKS = set of JWKs (used to verify JWTs)
+jti = unique token ID inside JWT payload
+
+
+A JWS (JWS — JSON Web Signature) is a JWT that is signed.
+All standard JWTs are actually JWS tokens (signed) to prevent tampering.
+
+The signature ensures that the payload hasn’t been modified.
+
+
+3️⃣ JWK — JSON Web Key
+A JWK is a JSON object that represents a public key.
+
+Used to verify the signature of a JWT (JWS).
+
+Example for an RSA public key:
+{
+  "kty": "RSA", → key type (RSA, EC, etc.)
+  "kid": "abcd1234", → key ID, used to select the right key from a set
+  "use": "sig", → intended use (sig = signature)
+  "n": "0vx7agoebGcQSuuPiLJXZptN...",
+  "e": "AQAB"
+}
+
+4️⃣ JWKS — JSON Web Key Set
+
+A JWKS is a set of JWKs, typically served by an auth provider like Cognito.
+
+
+Endpoint example:  https://cognito-idp.eu-west-1.amazonaws.com/<POOL_ID>/.well-known/jwks.json
+
+When you decode a JWT:
+
+    1. Read the kid (key ID) from the JWT header.
+
+    2. Look up the corresponding JWK in the JWKS.
+
+    3. Use the public key to verify the JWT signature.
+
+5️⃣ JTI — JWT ID
+jti is an optional claim in the payload:
+
+Stands for JWT ID
+
+Unique identifier for the token
+
+Useful to prevent replay attacks (store used JTIs in a DB/Redis and reject reused tokens)
+
+
+
+Auth Flow:
+JWT → JWS → JWK → JWKS flow

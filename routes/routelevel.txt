@@ -1,0 +1,11 @@
+2️⃣ Why aren’t route functions wrapped in try/except blocks?
+
+Because you don’t need them if you rely on FastAPI’s exception system 🚀.
+
+In FastAPI, if an exception bubbles up (e.g., UserNotFoundError), you can register an exception_handler to convert it into an HTTP response.
+
+Your decorator already normalizes DB errors into DatabaseOperationError.
+
+At the top-level, FastAPI will catch unhandled exceptions and return a 500.
+
+That’s why you normally don’t see try/except in route functions. Routes should be “happy path” code, and your exception-handling middleware (decorators + handlers) takes care of the unhappy path.

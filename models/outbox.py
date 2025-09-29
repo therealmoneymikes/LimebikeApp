@@ -2,7 +2,7 @@ from sqlalchemy import JSON, Column, DateTime, String, Integer, Enum, func
 
 from backend.models.base import Base
 from sqlalchemy.dialects.postgresql import UUID
-from backend.models.enums import AggregateType, OutboxEventStatus
+from backend.utils.model_enums import AggregateType, OutboxEventStatus
 
 
 
@@ -29,13 +29,13 @@ from backend.models.enums import AggregateType, OutboxEventStatus
 
     Metrics (Prometheus/Grafana)
 
-    Counters: outbox_events_created_total{event_type="UserCreated"}
+        Counters: outbox_events_created_total{event_type="UserCreated"}
 
-    Counters: outbox_events_published_total
+        Counters: outbox_events_published_total
 
-    Gauge: outbox_events_pending
+        Gauge: outbox_events_pending
 
-    Histogram: outbox_publish_latency_seconds
+        Histogram: outbox_publish_latency_seconds
 
 
 """

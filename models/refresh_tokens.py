@@ -20,7 +20,7 @@ class RefreshTokenBlacklist(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     # user_id + device_id = You can query “all tokens for this user” or “token for this device”
     device_id = Column(String, nullable=False) 
-    refresh_token = Column(Boolean, nullable=False, unique=True)
+    refresh_token = Column(String, nullable=False, unique=True)
     #Optional, but useful if you want to store history of issued tokens
     revoked = Column(Boolean, nullable=False, default=True)
     #Helps with cleanup of expired tokens
