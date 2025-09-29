@@ -20,4 +20,3 @@ async def get_user_by_id(db: DBAsyncSession, current_user: GetCurrentUserDep, us
     user = UserReadOut.model_validate(db_user)
     return user
 
-
