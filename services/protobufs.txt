@@ -1,0 +1,25 @@
+Quick reference for common operations:
+What you want to do:
+
+Import 
+thisCreate/Update/Delete relationshipsWriteRelationshipsRequest, RelationshipUpdateRead,
+relationshipsReadRelationshipsRequest,
+RelationshipFilterCheck,
+permissionsCheckPermissionRequest, CheckPermissionResponseFind,
+accessLookupResourcesRequestFind,
+resourceLookupSubjectsRequestSchema,operationsWriteSchemaRequest, 
+ReadSchemaRequest
+
+All of these are now available from the authzed package you installed - no need for manual protobuf generation!
+
+
+Key changes made:
+
+Removed manual gRPC setup - The authzed client handles all channel and credential management
+Updated method signatures - Added resource_type parameter since you likely work with multiple resource types (bikes, pickup_points, etc.)
+Added new helpful methods:
+
+remove_role() - Remove a relationship
+get_user_resources() - Find all resources a user can access
+get_resource_users() - Find all users who can access a resource
+read_relationships() - Query relationships with filters

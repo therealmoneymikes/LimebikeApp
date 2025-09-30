@@ -1,0 +1,4 @@
+
+
+
+The authzed library isn't compatible with protobuf 6.x yet. Downgrade to protobuf 5.x:

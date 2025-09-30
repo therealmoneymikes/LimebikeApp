@@ -1,0 +1,19 @@
+
+definition user {}
+// Access checks are: “Does the user have a role that grants this permission?”
+//Users are assigned to roles.
+//Permissions are attached to roles.
+//Permissions are tied to roles, not dynamic attributes of the user or resource.
+definition bike {
+    relation owner: user
+    relation assigned_admin: user
+    relation assigned_user: user
+
+    permission read = owner + assigned_admin + assigned_user
+    permission write = owner + assigned_admin
+}
+
+definition admin {
+    relation user: user
+    permission all = user
+}

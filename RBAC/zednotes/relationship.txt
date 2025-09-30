@@ -1,0 +1,13 @@
+Is this actor allowed to perform this action on this resource?
+   /¯¯¯¯¯¯¯/                     /¯¯¯¯¯¯¯¯¯/    /¯¯¯¯¯¯¯¯¯¯¯/
+    object                      permission or      object
+   (subject)                     relation        (resource)
+
+
+     resource      subject
+           ID          type
+         \ˍˍˍˍˍ\       \ˍˍ\
+ document:readme#editor@user:emilia
+/¯¯¯¯¯¯¯/       /¯¯¯¯¯/     /¯¯¯¯¯/
+resource      permission   subject
+  type        or relation    ID

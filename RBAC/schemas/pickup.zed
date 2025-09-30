@@ -1,0 +1,13 @@
+
+
+
+definition user {}
+
+
+definition pickup_point {
+    relation manager: user 
+    relation assigned_user: user
+
+    permission read = manager + assigned_user
+    permission write = manager 
+}

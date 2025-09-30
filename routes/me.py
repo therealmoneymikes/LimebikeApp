@@ -10,8 +10,6 @@ from backend.utils.db_session_manager import DBAsyncSession
 
 router = APIRouter()
 
-
-
 # Consistency → mobile/web clients can always hit /me after auth to hydrate the session.
 @router.get("/me", response_model=UserReadOut)
 async def get_me(db: DBAsyncSession, current_user: GetCurrentUserDep) -> UserReadOut:

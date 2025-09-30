@@ -1,0 +1,88 @@
+Nice one — this is a classic performance question that comes up a lot in microservices discussions. Let’s unpack it clearly:
+
+🚀 Why gRPC is usually faster than plain HTTP/REST
+1. Serialization format
+
+HTTP/REST APIs typically use JSON (sometimes XML):
+
+Human-readable but verbose (lots of {} and field names).
+
+Serialization/deserialization is relatively slow.
+
+gRPC uses Protocol Buffers (Protobuf):
+
+Binary, compact, strongly typed.
+
+Much smaller payload size and much faster to encode/decode.
+
+👉 Example: A JSON payload might be 2–5× larger than the same data in Protobuf.
+
+2. Transport layer
+
+HTTP/REST (traditional) runs over HTTP/1.1:
+
+Each request opens a new connection (or reuses with keep-alive).
+
+Text-based headers (large and repetitive).
+
+No native streaming — everything is request-response.
+
+gRPC runs over HTTP/2:
+
+Multiplexing: many requests on a single TCP connection (no head-of-line blocking).
+
+Binary framing (headers and body are compact).
+
+Built-in support for streaming (client, server, or bidirectional).
+
+Lower latency under high concurrency.
+
+3. Code generation & contracts
+
+gRPC uses .proto files to define the schema:
+
+Strong typing → no runtime guessing/parsing like JSON.
+
+Code generation → fewer mistakes, faster serialization.
+
+REST often relies on manual parsing/mapping of JSON → overhead.
+
+4. Streaming vs polling
+
+With REST, if you want updates, you often end up with polling (repeated HTTP requests).
+
+gRPC natively supports server streaming and bidirectional streaming, which is far more efficient.
+
+📊 Performance Example
+
+A REST/JSON API sending a 1 MB payload might take:
+
+~1.5 MB on the wire (because of text encoding).
+
+Tens of ms to serialize/deserialize.
+
+The same payload in gRPC/Protobuf:
+
+~300 KB on the wire.
+
+< 1 ms to encode/decode.
+
+⚖️ Trade-offs
+
+gRPC Pros:
+
+Faster, smaller payloads.
+
+Streaming support.
+
+Strong contracts (schema-first).
+
+gRPC Cons:
+
+Harder to debug (binary payloads, not human-readable).
+
+Browser support is weak (needs a proxy, since browsers can’t natively do HTTP/2 with gRPC).
+
+More complex setup (tooling, .proto files, codegen).
+
+👉 That’s why you’ll often see gRPC used for microservice-to-microservice internal communication, and REST/JSON or GraphQL exposed to external clients, since developers/debugging tools love human-readable formats.

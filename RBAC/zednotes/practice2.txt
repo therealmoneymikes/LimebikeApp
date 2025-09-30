@@ -1,0 +1,58 @@
+
+
+In SpiceDB, + means union (OR). view = reader OR owner
+If any of the conditions are true, the permission is granted.
+permission view = reader + owner
+
+
+
+2. The -> arrow
+The arrow lets you “walk” relationships into another object’s permissions or relations.
+
+The arrow lets you “walk” relationships into another object’s permissions or relations.
+
+relation parent: folder
+permission view = reader + parent->owner
+
+A document has a parent folder.
+
+If the user is an owner of that parent folder, then they can also view the document.
+
+"Follow the parent link, and check if the user is in owner of that parent."
+
+So -> = traverse from this resource to another resource’s relation/permission.
+
+
+3. Recursive permissions
+
+This one is a bit trickier.
+Recursive = a permission that refers to itself, often through another resource.
+
+definition folder {
+    relation owner: user
+    relation parent: folder
+
+    permission view = owner + parent->view
+}
+
+A folder can be viewed if:
+
+You’re an owner of that folder, OR
+
+You can view its parent.
+That means if you have view on a top-level folder, you automatically get view on all subfolders.
+
+
+
+
+
+
+
+definition document {
+    relation parent: folder
+    permission view = parent->view
+}
+
+→ If you can view the top folder, you can view all nested folders and all documents inside them, no matter how deep.
+
+That’s the recursive effect: permissions “cascade down” a hierarchy.

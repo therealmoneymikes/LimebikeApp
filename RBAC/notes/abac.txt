@@ -1,0 +1,7 @@
+2. Other common terms
+
+RBAC (Role-Based Access Control): Permissions are attached to roles, not directly to users.
+
+ABAC (Attribute-Based Access Control): Permissions depend on user/resource attributes (like department, clearance, or time of day).
+
+ACL: Usually considered a more “direct mapping” of subjects → permissions per resource.

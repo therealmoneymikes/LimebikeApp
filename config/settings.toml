@@ -5,6 +5,7 @@
 [default]
 APP_VERSION = "1.0.0"
 
+
 [jwt]
 SECRET_JEY = "super-secret"
 ALGORITHM = "HS256"
@@ -20,14 +21,21 @@ PASSWORD = "dbpass"
 NAME= "limebikemain"
 
 
-[development.database]
+[development]
+SPICEDB_BEARER_TOKEN_KEY = "dev"
+SPICEDB_ENDPOINT = "localhost:50051"
 PORT = 5432
+SPICEDB_INSECURE_CONF = "True"
 
-
-[staging.database]
+[staging]
+SPICEDB_BEARER_TOKEN_KEY = "dev"
+SPICEDB_ENDPOINT = "localhost:50051"
 PORT = 6000
 
-[production.database]
+[production]
+SPICEDB_ENDPOINT = "grpc.authzed.com:443"
+SPICEDB_BEARER_TOKEN_KEY = "prod"
 PORT = 5432
 COCKROACH_DB_PORT = 26257
 COCKROACH_DB_ADMIN_UI = 8080
+SPICEDB_INSECURE_CONF = "False"

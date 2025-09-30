@@ -1,0 +1,100 @@
+Cognito handles login + identity federation + JWT issuance.
+
+Your backend receives JWTs → uses them to know who the user is (authn).
+
+For each request, the backend queries SpiceDB to decide what the user can do (authz).
+
+Example: check(user_id, "read", "document:123") → true/false.
+
+This separation follows the classic AuthN vs AuthZ split:
+
+Authentication (Cognito): Who are you?
+
+Authorization (SpiceDB): What are you allowed to do?
+
+
+⚖️ Why not “just Cognito”?
+
+If you only used Cognito:
+
+You’d have to encode all role/permission logic into JWT claims at login time.
+
+Any permission change would require re-login or token refresh.
+
+Complex resource-level permissions (like "can comment on issue #42 but not issue #43") don’t fit well into static JWT claims.
+
+Cognito groups are flat and coarse-grained, not relational (no “this user is a member of this team, which owns this project”).
+
+✅ In short:
+You use Cognito for authentication and JWT issuance, and SpiceDB for scalable, fine-grained RBAC/ABAC authorization. Cognito alone is not flexible enough for complex, dynamic RBAC at resource-level granularity.
+
+
+Great follow-up 👍
+
+RBAC vs ABAC
+RBAC (Role-Based Access Control)
+
+Users are assigned to roles.
+
+Roles have predefined permissions.
+
+Example:
+
+Role: editor → can edit_documents.
+
+Role: viewer → can read_documents.
+
+✅ Simple, predictable.
+
+❌ Gets messy with many exceptions (e.g., "editor but only for project X").
+
+ABAC (Attribute-Based Access Control)
+
+Access decisions are made based on attributes of:
+
+User (department, clearance level, age, subscription tier, etc.)
+
+Resource (document owner, resource sensitivity, project ID, region, etc.)
+
+Environment/Context (time of day, IP, location, request type, etc.).
+
+Instead of "roles", you define policies that evaluate attributes dynamically.
+
+Example policy:
+
+User.department == "Finance" AND
+Resource.type == "Invoice" AND
+Request.time < "18:00"
+
+
+→ Then allow action.
+
+Comparison Example
+
+RBAC:
+
+Alice is Manager role → Managers can approve expenses.
+
+Bob is Employee role → Employees cannot approve expenses.
+
+ABAC:
+
+Alice can approve an expense if:
+
+User.department == Expense.department
+
+AND Expense.amount < 10,000
+
+AND Request.location == "HQ"
+
+Here, Alice’s ability depends on attributes of both the user and the resource.
+
+🔗 Where SpiceDB fits
+
+SpiceDB supports relationship-based access control (ReBAC), which can express RBAC and ABAC-style policies:
+
+RBAC → Users linked to roles.
+
+ABAC → Attributes stored as relationships or contextual conditions.
+
+ReBAC → Even richer (users related to resources via groups/teams/projects).

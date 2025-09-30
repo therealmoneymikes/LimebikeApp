@@ -1,0 +1,12 @@
+
+
+
+definition user {}
+
+definition app {
+    relation admin: user
+    relation user: user
+
+    permission manage_users = admin
+    permission view_dashboard = admin + user
+}

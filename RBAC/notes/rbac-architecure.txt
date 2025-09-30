@@ -1,0 +1,32 @@
+project/
+├─ backend/                 # existing FastAPI monolith
+│  ├─ routes/
+│  ├─ crud/
+│  ├─ models/
+│  ├─ rbac/                 # RBAC helper module (for now)
+│  │  ├─ schema/            # zed schema files & migrations
+│  │  │  └─ schema.zed
+│  │  ├─ client.py         # SpiceDB client wrapper
+│  │  ├─ dependency.py     # FastAPI Depends wrappers
+│  │  ├─ service.py        # higher-level convenience functions (check, grant, revoke)
+│  │  └─ tests/
+│  └─ main.py
+├─ docker-compose.yml
+├─ Dockerfile
+└─ infra/
+   ├─ k8s/                 # later k8s manifests
+   └─ ci/                  # CI scripts
+
+
+
+project/
+├─ rbac-service/
+│  ├─ app/
+│  │  ├─ api/               # REST endpoints: check, grant, revoke, admin
+│  │  ├─ auth/              # service auth (mTLS/jwt/service tokens)
+│  │  ├─ rbac/              # schema, client, service logic
+│  │  └─ main.py
+│  ├─ Dockerfile
+│  ├─ helm/ or k8s/
+│  └─ ci/
+└─ backend/                 # other services call rbac-service

@@ -1,0 +1,20 @@
+definition user {}
+
+definition role {
+    relation member: user
+}
+
+definition super_admin {
+    relation user: user
+    permission all = user
+}
+
+definition admin {
+    relation user: user
+    permission all = user
+}
+
+definition guest {
+    relation user: user
+    permission all = user
+}

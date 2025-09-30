@@ -1,0 +1,36 @@
+
+
+
+Zed can talk to a running instance of spicedb
+
+1. Start SpiceDB locally (dev mode)
+spicedb serve --grpc-preshared-key "supersecret" --http-enabled=true --datastore-engine=memory
+
+2. Push a schema (schema.zed)
+    1. zed context set local localhost:50051 supersecret
+    2. zed schema write schema.zed
+
+2b. Create schemas for each entity, then 
+    create schema.zed as the entry point that imports everything
+
+    e.g 
+    import app.zed
+    import bike.zed 
+    import user_roles.zed 
+    import pickup.zed
+
+3. Write the permissions to user (SpiceDB will load the whole model.)
+zed schea write RBAC/schema/schema.zed 
+
+4. Check Permissions
+zed permission check document:1 read user:michael
+
+
+5. 🔹 (Optional) seeds/relationships.zed
+role:admin#member@user:michael
+bike:bike1#owner@user:michael
+bike:bike1#renter@user:alice
+
+Then test:
+zed permission check bike:bike1 read user:michael    # → true
+zed permission check bike:bike1 write user:alice    # → false
