@@ -1,10 +1,13 @@
 # main.py
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.openapi.docs import get_swagger_ui_html
 from services.authz import AuthzService
 from utils.redis.redis_cache import RedisClient, RedisProxy
 from services.rbac_interface import RBAC
 from config.config import settings
+import secrets
 
 #Routers 
 from routes.bikes import router as bikerouter
@@ -61,8 +64,37 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     version=str("1.0.0"),
-    lifespan=lifespan
+    lifespan=lifespan,
+    docs_url=None,
+    redoc_url=None
 )
 app.include_router(bikerouter)
 app.include_router(merouter)
 app.include_router(userrouter)
+
+security = HTTPBasic()
+
+USERNAME = "username"
+PASSWORD = "superpassword"
+
+def verify_creds(creds: HTTPBasicCredentials = Depends(security)):
+    """ Verify secruity credentials for users to view api docs"""
+    correct_username = secrets.compare_digest(creds.username, USERNAME)
+    correct_password = secrets.compare_digest(creds.password, PASSWORD)
+
+    if not (correct_username and correct_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentails",
+            headers={"WWW-Authenticate": "Basic"}
+        )
+        
+@app.get("/docs", include_in_schema=False)
+def custom_swagger_ui(creds: HTTPBasicCredentials = Depends(verify_creds)):
+    """ Custom Swagger UI Router to allow for basic authentication """
+    return get_swagger_ui_html(openapi_url=app.openapi_url or "/api/v1/openapi.json", title="Limebike API Docs")
+
+@app.get(app.openapi_url or "", include_in_schema=False)
+def get_open_api_protected(creds: HTTPBasicCredentials = Depends(verify_creds)):
+    """ Custom Open API hook to lock /openapi.json call to swagger UI"""
+    return app.openapi()
