@@ -1,6 +1,6 @@
 from sqlalchemy import func, select
-from backend.exceptions.handlers import handle_db_exceptions
-from backend.utils.db_route_dependencies import AsyncDBSession
+from exceptions.handlers import handle_db_exceptions
+from utils.db_route_dependencies import AsyncDBSession
 from models.bikes import Bike
 from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.db.bikes import DBBikeReadAllOut, DBBikeReadOne, DBBikeReadOneOut

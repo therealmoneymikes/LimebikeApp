@@ -10,7 +10,7 @@ from redis.typing import ResponseT
 
 logger = logging.getLogger(__name__)
 
-
+REDIS_URL = settings.get("REDIS_URL", "redis://localhost:6379/0")
 class RedisClient:
     """
     Singleton Redis Client
@@ -22,7 +22,7 @@ class RedisClient:
     def get_instance(cls) -> redis.Redis:
         if cls._instance is None:
             cls._instance = redis.from_url(
-                settings.REDIS_URL,
+                REDIS_URL,
                 decode_responses=True,
                 max_connections=20, 
                 socket_connect_timeout=5,

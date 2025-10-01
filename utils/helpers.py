@@ -6,7 +6,7 @@
 
 import uuid
 
-from backend.config import namespaces
+from config import namespaces
 import phonenumbers
 import bcrypt
 

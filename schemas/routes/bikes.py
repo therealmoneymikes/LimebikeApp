@@ -10,7 +10,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 
-from backend.models.bikes import BikeTypeEnum
+from models.bikes import BikeTypeEnum
 
 
 class BikeReadOne(BaseModel):
@@ -26,13 +26,15 @@ class BikeReadOneOut(BaseModel):
     location: Coordinates
     
     
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
     
 
 class BikeReadAllOut(BaseModel):
     bikes: list[BikeReadOneOut]
     
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
 

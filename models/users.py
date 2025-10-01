@@ -1,6 +1,6 @@
 from typing import Optional
-from backend.config import namespaces
-from base import Base
+from config import namespaces
+from .base import Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import declared_attr
 from sqlalchemy.dialects.postgresql import UUID

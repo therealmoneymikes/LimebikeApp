@@ -2,14 +2,14 @@ from typing import Literal
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy import func
 
-from backend.config.security.auth import GetCurrentUserDep
-from backend.crud.bikes.bikes import get_available_bike, get_available_bikes
-from backend.schemas.db.bikes import DBBikeReadOne
-from backend.schemas.routes.bikes import BikeReadAllOut, BikeReadOneOut
+from config.security.auth import GetCurrentUserDep
+from crud.bikes.bikes import get_available_bike, get_available_bikes
+from schemas.db.bikes import DBBikeReadOne
+from schemas.routes.bikes import BikeReadAllOut, BikeReadOneOut
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from backend.services.dependencies import RBAC_INTERFACE
-from backend.utils.db_session_manager import DBAsyncSession
+from services.dependencies import RBAC_INTERFACE
+from utils.db_session_manager import DBAsyncSession
 from config.security.auth import get_current_user
 
 

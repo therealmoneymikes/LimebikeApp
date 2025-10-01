@@ -17,8 +17,9 @@ class DBPickUpPointOut(BaseModel):
     name: str
     location: tuple[float, float]
     
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
         
 
 class DBPickUpPointDelete(BaseModel):
@@ -27,5 +28,6 @@ class DBPickUpPointDelete(BaseModel):
 class PickUpPointDeleteOut(DBPickUpPoint):
     pass
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }

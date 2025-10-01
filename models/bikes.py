@@ -1,4 +1,4 @@
-from base import Base
+from .base import Base
 from sqlalchemy.dialects.postgresql import UUID, ENUM, TIMESTAMP
 from sqlalchemy.sql import func
 from sqlalchemy import Column, String, Enum, UUID, Float, DateTime
@@ -58,9 +58,9 @@ class Bike(Base):
 
     Use postgresql.TIMESTAMP(timezone=True) if you’re optimizing for Postgres and want precise control.
     
-    wire-compatible with Postgres
+    wire-compatible with Postgres, 
 """
-    id = Column(UUID(as_uuid=True), unique=True)
+    id = Column(UUID(as_uuid=True), unique=True, primary_key=True)
     bike_type = Column(Enum(BikeTypeEnum), nullable=False)
     commissioned_date = Column(TIMESTAMP, nullable=False, server_default=func.now())
     """ 

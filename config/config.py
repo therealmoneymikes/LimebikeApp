@@ -1,7 +1,8 @@
 
 from dynaconf import Dynaconf
+from typing import Any
 
-settings = Dynaconf(
+settings: Any = Dynaconf(
     envvar_prefix="LIMEBIKEAPP",
     settings_files=['settings.toml', '.secrets.toml'],
 )

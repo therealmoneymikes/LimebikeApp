@@ -20,8 +20,9 @@ class DBUserReadOut(BaseModel):
     email: str
     phone_number: str
     
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
 
 
 class DBUserCreate(BaseModel):
@@ -41,8 +42,9 @@ class DBUserCreateOut(BaseModel):
     surname: str
     phone_number_normalized: str
     
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
 
 
 class DBUserUpdate(BaseModel):
@@ -62,8 +64,9 @@ class DBUserUpdateOut(BaseModel):
     email: str | None
     phone_number: str | None
     
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
         
         
 class DBUserDeleteOut(BaseModel):

@@ -1,15 +1,15 @@
 # main.py
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from backend.services.authz import AuthzService
-from backend.utils.redis.redis_cache import RedisClient, RedisProxy
-from backend.services.rbac_interface import RBAC
+from services.authz import AuthzService
+from utils.redis.redis_cache import RedisClient, RedisProxy
+from services.rbac_interface import RBAC
 from config.config import settings
 
 #Routers 
-from backend.routes.bikes import router as bikerouter
-from backend.routes.me import router as merouter
-from backend.routes.users import router as userrouter
+from routes.bikes import router as bikerouter
+from routes.me import router as merouter
+from routes.users import router as userrouter
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -27,9 +27,9 @@ async def lifespan(app: FastAPI):
     
     # Initialize SpiceDB client
     authz_client = AuthzService(
-        spicedb_host=str(settings.SPICEDB_ENDPOINT),
-        token=str(settings.SPICEDB_BEARER_TOKEN_KEY),
-        insecure=bool(settings.SPICEDB_INSECURE_CONF),
+        spicedb_host=str(settings.get("SPICEDB_ENDPOINT", "")),
+        token=str(settings.get("SPICEDB_BEARER_TOKEN_KEY", "")),
+        insecure=bool(settings.get("SPICEDB_INSECURE_CONF", "")),
     )
     
     # Initialize RBAC interface
@@ -60,7 +60,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    version=str(settings.APP_VERSION),
+    version=str("1.0.0"),
     lifespan=lifespan
 )
 app.include_router(bikerouter)

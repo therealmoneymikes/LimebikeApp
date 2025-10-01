@@ -26,8 +26,9 @@ class UserCreateOut(BaseModel):
     surname: str
     phone_number: str
     
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
 
 
 class UserRead(BaseModel):
@@ -51,8 +52,9 @@ class UserUpdate(BaseModel):
 
 class UserUpdateOut(UserUpdate):
     pass
-    class Config:
-            orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
 
 
 class UserDelete(BaseModel):
@@ -61,7 +63,8 @@ class UserDelete(BaseModel):
 class UserDeleteOut(BaseModel):
     first_name: str
     
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
     
     

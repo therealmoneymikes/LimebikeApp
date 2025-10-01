@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException, APIRouter, Header, status
-from backend.config.security.auth import GetCurrentUserDep
-from backend.crud.users.users import get_user
-from backend.schemas.routes.users import UserReadOut
+from config.security.auth import GetCurrentUserDep
+from crud.users.users import get_user
+from schemas.routes.users import UserReadOut
 from jose import jwt
-from backend.services.dependencies import RBAC
+from services.dependencies import RBAC
 from utils.db_session_manager import DBAsyncSession
 from services.dependencies import RBAC_INTERFACE
 

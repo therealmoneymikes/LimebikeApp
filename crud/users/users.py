@@ -1,9 +1,9 @@
 from uuid import UUID
-from backend.exceptions.db_exceptions import DatabaseOperationError, EmailAlreadyExistsError, UserNotFoundError
-from backend.exceptions.handlers import handle_db_exceptions
-from backend.models.users import User
-from backend.schemas.db.users import DBUserCreateOut, DBUserDeleteOut, DBUserReadOut, DBUserUpdateOut
-from backend.schemas.routes.users import UserCreate, UserRead, UserUpdate
+from exceptions.db_exceptions import DatabaseOperationError, EmailAlreadyExistsError, UserNotFoundError
+from exceptions.handlers import handle_db_exceptions
+from models.users import User
+from schemas.db.users import DBUserCreateOut, DBUserDeleteOut, DBUserReadOut, DBUserUpdateOut
+from schemas.routes.users import UserCreate, UserRead, UserUpdate
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 

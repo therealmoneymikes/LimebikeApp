@@ -301,7 +301,7 @@ class AuthzService:
         try:
             # Try to close the channel if it exists
             # The authzed Client may have internal channel management
-            if hasattr(self.client, '_channel') and self.client._channel is not None # type: ignore[attr-defined]:
+            if hasattr(self.client, '_channel'):
                 self.client._channel.close()  # type: ignore[attr-defined]
                 logger.info(f"Closed gRPC channel to {self._host}")
             elif hasattr(self.client, 'close'):

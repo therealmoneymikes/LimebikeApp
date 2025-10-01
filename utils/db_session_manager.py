@@ -1,11 +1,11 @@
 import contextlib
 from dataclasses import dataclass
-from typing import Annotated, Any, AsyncGenerator, AsyncIterator
+from typing import Annotated, Any, AsyncGenerator, AsyncIterator, cast
 from urllib.parse import quote_plus
 from dynaconf import Dynaconf
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession, AsyncConnection, async_sessionmaker, create_async_engine
-from backend.config import config
+from config import config
 from types import SimpleNamespace
 # contextlib.asynccontextmanager -> asynccontextmanager allows you to write a generator-like function instead of manually defining __aenter__ and __aexit__.
 
@@ -78,20 +78,25 @@ class DatabaseSettings:
     URL: str
     NAME: str
 #getattr(object, attribute_name, default_value)
+#get() avoids PyLance complaining because it returns Optional[Any].
+
+
+db_config = cast(dict[str, Any], config.settings.database)
+
 database_settings = DatabaseSettings(
-    HOST=str(config.settings.HOST),
-    PORT=int(str(config.settings.PORT)),
-    USER=str(config.settings.USER),
-    PASSWORD=str(config.settings.PASSWORD),
-    URL=str(config.settings.URL),
-    NAME=str(config.settings.NAME),
+    HOST=str(db_config.get("HOST")),
+    PORT=int(str(db_config.get("PORT"))),
+    USER=str(db_config.get("USER")),
+    PASSWORD=str(db_config.get("PASSWORD")),
+    URL=str(db_config.get("URL", "")),
+    NAME=str(db_config.get("NAME")),
 )
-port = f":{database_settings.PORT}" if database_settings.PORT else ""
+
 
 password = quote_plus(database_settings.PASSWORD)
 #Logger Info
 #This prevents connection leaks and keeps the transaction lifecycle predictable.
-sessionmanager = DatabaseSessionManager(f"postgresql+asyncpg://{database_settings.USER}:{password}@{database_settings.HOST}{port}/{database_settings.NAME}")
+sessionmanager = DatabaseSessionManager(f"postgresql+asyncpg://{database_settings.USER}:{password}@{database_settings.HOST}{database_settings.PORT}/{database_settings.NAME}")
 
 
 # When injected into FastAPI (Depends(get_db_session)), it yields a session per request and closes/rolls back properly.

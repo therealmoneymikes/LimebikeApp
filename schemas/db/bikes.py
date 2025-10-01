@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from backend.models.bikes import BikeTypeEnum
+from models.bikes import BikeTypeEnum
 
 
 
@@ -27,8 +27,9 @@ class DBBikeCreateOut(BaseModel):
     
     #orm_mode = True ->  lets Pydantic convert directly from SQLAlchemy objects.
     #But when you use SQLAlchemy (or any ORM), you often return a class instance, not a dict.
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
         
 
 class DBBikeUpdate(BaseModel):
@@ -41,8 +42,9 @@ class DBBikeUpdateOut(BaseModel):
     location: tuple[float, float]
     bike_type: BikeTypeEnum
     
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
     
 
 
@@ -55,8 +57,9 @@ class DBBikeDeleteOut(BaseModel):
     location: tuple[float, float]
     commissioned_date: datetime
     
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
     
 
 class DBBikeReadOne(BaseModel):
@@ -68,13 +71,15 @@ class DBBikeReadOneOut(BaseModel):
     location: tuple[float, float]
     commissioned_date: datetime
     
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
     
 
 class DBBikeReadAllOut(BaseModel):
     bikes: list[DBBikeReadOneOut]
     
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True  # instead of orm_mode
+    }
     

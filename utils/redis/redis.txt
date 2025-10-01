@@ -1,0 +1,28 @@
+
+
+redis://[:password]@host:port/db
+password → optional if your Redis instance requires AUTH
+
+host → localhost or the hostname of your Redis server
+
+port → default is 6379
+
+db → optional, integer DB number (default 0)
+
+
+
+No password
+redis://localhost:6379/0
+
+
+Local Redis with password supersecret:
+redis://:supersecret@localhost:6379/0
+
+
+Dockerized Redis on same machine:
+redis://localhost:6379/0
+
+
+
+Yes, for local development, unless you run Redis via Docker:
+docker run -p 6379:6379 redis:7

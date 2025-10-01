@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 
-from backend.config.security.auth import GetCurrentUserDep
-from backend.crud.users.users import delete_user, get_user, update_user
-from backend.schemas.routes.users import UserDeleteOut, UserReadOut, UserUpdate, UserUpdateOut
-from backend.utils.db_session_manager import DBAsyncSession
+from config.security.auth import GetCurrentUserDep
+from crud.users.users import delete_user, get_user, update_user
+from schemas.routes.users import UserDeleteOut, UserReadOut, UserUpdate, UserUpdateOut
+from utils.db_session_manager import DBAsyncSession
 
 
 
