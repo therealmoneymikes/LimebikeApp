@@ -1,6 +1,6 @@
 from config.config import settings
 from services.authz import AuthzService
-from services.rbac_interface import RBAC_INTERFACE
+from services.rbac_interface import RBAC
 
 authz_client = AuthzService(
     spicedb_host=str(settings.SPICEDB_ENDPOINT),
@@ -8,4 +8,4 @@ authz_client = AuthzService(
     insecure=bool(settings.SPICEDB_INSECURE_CONF),
 )
 
-RBAC = RBAC_INTERFACE(authz_client)
+RBAC_INTERFACE = RBAC(authz_client)

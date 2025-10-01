@@ -3,7 +3,7 @@ from services.authz import AuthzService
 import logging
 
 
-class RBAC_INTERFACE:
+class RBAC:
     def __init__(self, authz: AuthzService, logger: logging.Logger | None = None):
         self.authz = authz
         self.logger = logger or logging.getLogger(__name__)
@@ -62,7 +62,7 @@ class RBAC_INTERFACE:
         """
         return self.assign(
             user_id=user_id,
-            role="owner",           # must match your .zed schema
+            role="owner",  # must match your .zed schema
             resource_type="profile",
             resource_id=user_id
         )

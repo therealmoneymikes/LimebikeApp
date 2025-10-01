@@ -58,3 +58,23 @@ class DBBikeDeleteOut(BaseModel):
     class Config:
         orm_mode = True
     
+
+class DBBikeReadOne(BaseModel):
+    id: str
+
+class DBBikeReadOneOut(BaseModel):
+    id: str
+    bike_type: BikeTypeEnum
+    location: tuple[float, float]
+    commissioned_date: datetime
+    
+    class Config:
+        orm_mode = True
+    
+
+class DBBikeReadAllOut(BaseModel):
+    bikes: list[DBBikeReadOneOut]
+    
+    class Config:
+        orm_mode = True
+    

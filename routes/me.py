@@ -7,7 +7,14 @@ from backend.utils.db_session_manager import DBAsyncSession
 
 
 
+""" 
+    Best practice split
 
+    /me basic info (profile, settings, etc.) → no RBAC (just auth).
+
+    /me/... resource listings (orders, projects, invoices) → RBAC check, because not
+
+"""
 router = APIRouter()
 
 # Consistency → mobile/web clients can always hit /me after auth to hydrate the session.
