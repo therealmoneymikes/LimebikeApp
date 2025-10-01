@@ -18,6 +18,10 @@ from authzed.api.v1 import (
 )
 from grpcutil import bearer_token_credentials, insecure_bearer_token_credentials
 from typing import List, Optional
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class AuthzService:
@@ -40,6 +44,8 @@ class AuthzService:
             credentials = bearer_token_credentials(token)
         
         self.client = Client(spicedb_host, credentials)
+        self._host = spicedb_host
+        logger.info(f"AuthzService initialized for {spicedb_host}")
     
     def check_permission(
         self, 
@@ -79,7 +85,7 @@ class AuthzService:
             response = self.client.CheckPermission(request)
             return response.permissionship == CheckPermissionResponse.PERMISSIONSHIP_HAS_PERMISSION
         except Exception as e:
-            print(f"Error checking permission: {e}")
+            logger.error(f"Error checking permission: {e}")
             return False
     
     def assign_role(
@@ -124,10 +130,10 @@ class AuthzService:
         
         try:
             response = self.client.WriteRelationships(request)
-            print(f"✓ Relationship created at: {response.written_at}")
+            logger.info(f"Relationship created at: {response.written_at}")
             return True
         except Exception as e:
-            print(f"Error assigning role: {e}")
+            logger.error(f"Error assigning role: {e}")
             return False
     
     def remove_role(
@@ -163,10 +169,10 @@ class AuthzService:
         
         try:
             response = self.client.DeleteRelationships(request)
-            print(f"✓ Relationship deleted at: {response.deleted_at}")
+            logger.info(f"Relationship deleted at: {response.deleted_at}")
             return True
         except Exception as e:
-            print(f"Error removing role: {e}")
+            logger.error(f"Error removing role: {e}")
             return False
     
     def get_user_resources(
@@ -203,7 +209,7 @@ class AuthzService:
             for result in self.client.LookupResources(request):
                 resource_ids.append(result.resource_object_id)
         except Exception as e:
-            print(f"Error looking up resources: {e}")
+            logger.error(f"Error looking up resources: {e}")
         
         return resource_ids
     
@@ -239,7 +245,7 @@ class AuthzService:
             for result in self.client.LookupSubjects(request):
                 user_ids.append(result.subject.subject_object_id)
         except Exception as e:
-            print(f"Error looking up subjects: {e}")
+            logger.error(f"Error looking up subjects: {e}")
         
         return user_ids
     
@@ -264,7 +270,6 @@ class AuthzService:
         Returns:
             List of matching relationships
         """
-        # Build subject filter if subject_type or subject_id is provided
         subject_filter = None
         if subject_type or subject_id:
             subject_filter = SubjectFilter(
@@ -287,55 +292,20 @@ class AuthzService:
             for rel_response in self.client.ReadRelationships(request):
                 relationships.append(rel_response.relationship)
         except Exception as e:
-            print(f"Error reading relationships: {e}")
+            logger.error(f"Error reading relationships: {e}")
         
         return relationships
     
     def close(self):
-        """Close the gRPC channel."""
-        # The authzed client handles channel management internally
-        # This method is here for compatibility if needed
-        pass
-
-
-# Example usage
-if __name__ == "__main__":
-    # Initialize service
-    authz = AuthzService(
-        spicedb_host="localhost:50051",
-        token="dev-secret-key-12345",
-        insecure=True  # Only for local development
-    )
-    
-    # Assign a role
-    authz.assign_role(
-        user_id="alice",
-        role="owner",
-        resource_type="bike",
-        resource_id="bike-123"
-    )
-    
-    # Check permission
-    can_write = authz.check_permission(
-        user_id="alice",
-        action="write",
-        resource_type="bike",
-        resource_id="bike-123"
-    )
-    print(f"Alice can write to bike-123: {can_write}")
-    
-    # Get all bikes Alice can read
-    bikes = authz.get_user_resources(
-        user_id="alice",
-        resource_type="bike",
-        permission="read"
-    )
-    print(f"Alice can read bikes: {bikes}")
-    
-    # Get all users who can read bike-123
-    users = authz.get_resource_users(
-        resource_type="bike",
-        resource_id="bike-123",
-        permission="read"
-    )
-    print(f"Users who can read bike-123: {users}")
+        """Close the gRPC channel properly."""
+        try:
+            # Try to close the channel if it exists
+            # The authzed Client may have internal channel management
+            if hasattr(self.client, '_channel') and self.client._channel is not None # type: ignore[attr-defined]:
+                self.client._channel.close()  # type: ignore[attr-defined]
+                logger.info(f"Closed gRPC channel to {self._host}")
+            elif hasattr(self.client, 'close'):
+                self.client.close() # type: ignore[attr-defined]
+                logger.info(f"Closed client connection to {self._host}")
+        except Exception as e:
+            logger.error(f"Error closing gRPC channel: {e}")
