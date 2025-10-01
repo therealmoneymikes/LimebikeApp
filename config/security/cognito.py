@@ -29,7 +29,7 @@ import httpx
     iss (issuer)
     aud (your app client ID)
     exp (expiration)
-    token_use (id or access)
+    token_use (id = frontend ID or access = backend route)
 
 Only after verification, trust the claims and use sub as the canonical user id.
 """

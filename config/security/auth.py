@@ -25,8 +25,14 @@ def get_signing_key(kid: str):
     return key
 
 AuthCredentials = Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)]
+""" 
+    token_use != "id". Typically for API calls, you might want token_use == "access" instead of "id" because ID tokens are for front-end login, while access tokens are for API authorization.
 
-def get_current_user(credentials: AuthCredentials):
+    ID Token	Identifies the user to the frontend (profile info, login)	"id"
+    Access Token	Authorizes API calls / access to resources	"access"
+    Refresh Token	Used to get new ID/Access tokens	N/A
+"""
+def get_current_user(credentials: AuthCredentials) -> dict:
     token = credentials.credentials
     try:
         headers = jwt.get_unverified_headers(token)
@@ -40,8 +46,8 @@ def get_current_user(credentials: AuthCredentials):
             issuer=f"https://cognito-idp.{COGNITO_REGION}.amazonaws.com/{USER_POOL_ID}",
         )
 
-        # Optional: check token_use
-        if claims.get("token_use") != "id":
+     
+        if claims.get("token_use") != "access":
             raise HTTPException(status_code=401, detail="Invalid token use")
 
         # `sub` is the canonical user ID

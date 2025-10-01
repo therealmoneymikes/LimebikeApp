@@ -40,7 +40,7 @@ async def get_available_bikes(db: AsyncSession, longitude: float, latitude: floa
    
     return DBBikeReadAllOut.model_validate(bikes)
 
-@handle_db_exceptions("get_available_bikes")
+@handle_db_exceptions("get_available_bike")
 async def get_available_bike(db: AsyncSession, bike: DBBikeReadOne) -> DBBikeReadOneOut | None:
     """
     DB operation that retrieve a bike by id (Admin Only)

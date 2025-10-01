@@ -55,3 +55,18 @@ Useful to prevent replay attacks (store used JTIs in a DB/Redis and reject reuse
 
 Auth Flow:
 JWT → JWS → JWK → JWKS flow
+
+
+For the RBAC system
+
+When you call RBAC_INTERFACE.permit(user_id, ...), you need the actual user ID to check permissions.
+
+That user ID is stored in the Access Token claims under sub (the canonical Cognito user ID).
+
+Therefore, in get_current_user for API routes, you should verify:
+
+Do not use ID tokens for backend RBAC checks — they’re meant for frontend identity.
+
+Use Access tokens: token_use == "access".
+
+Your RBAC permission checks will then always use sub from the access token.

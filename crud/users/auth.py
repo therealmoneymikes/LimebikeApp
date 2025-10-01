@@ -26,7 +26,7 @@ async def create_user(db: AsyncSession, user: UserCreate) -> DBUserCreateOut | N
 
     user_data = await db.execute(select(User).where(User.email == user.email))
     existing_user = user_data.scalar_one_or_none()
-    if existing_user:
+    if not existing_user:
         return None
     
     user_id = generate_user_id(user.email)
