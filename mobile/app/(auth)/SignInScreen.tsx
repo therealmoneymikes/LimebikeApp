@@ -17,38 +17,55 @@ import {
   FontAwesome5,
 } from "@expo/vector-icons";
 import { SFSymbol, SymbolView } from "expo-symbols";
+import CustomPressable from "@/components/BaseComponents/CustomPressable";
+import { router } from "expo-router";
+
+interface SignInButtonProps {
+  logo: keyof SFSymbol | string;
+  content: string;
+  fallback: keyof typeof MaterialCommunityIcons.glyphMap;
+  btnAction: () => void;
+  color?: string;
+}
 const SignInScreen = () => {
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const otherOptionsAction = (data?: object) => {
+    router.push("/(auth)/OtherOptionsScreen");
+  };
   const checkBoxMenu = [
     "Send me offers and news from Lime via email and other electronic messages",
     "I agree to Lime's User Agreement and Privacy Policy",
   ];
-  const signInOptions: {
-    logo: keyof SFSymbol | string;
-    content: string;
-    fallback?: string;
-    color?: string;
-  }[] = [
+  const signInOptions: SignInButtonProps[] = [
     {
       logo: "applelogo",
       content: "Sign in with Apple",
       fallback: "apple",
+      btnAction: () => router.push("/(auth)/OtherOptionsScreen"),
       color: "black",
     },
     {
       logo: "",
       content: "Sign In with Google",
       fallback: "google",
+      btnAction: () => router.push("/(auth)/OtherOptionsScreen"),
       color: "white",
     },
-    { logo: "", content: "Other options", fallback: "", color: "" },
+    {
+      logo: "",
+      content: "Other options",
+      fallback: "set-none",
+      btnAction: () => router.push("/(auth)/OtherOptionsScreen"),
+      color: "",
+    },
   ];
-  const [platform, setPlatform] = useState<typeof Platform.OS>("ios");
 
   const toggleCheckbox = (currentIndex: number): void => {
     setSelectedIndex((prev) => (prev === currentIndex ? null : currentIndex));
   };
+
   return (
     <View>
       {/* Checkboxes */}
@@ -64,8 +81,8 @@ const SignInScreen = () => {
         style={{
           height: "45%",
           alignContent: "center",
-          rowGap: 10,
-          justifyContent: "center",
+          rowGap: 4,
+          justifyContent: "flex-start",
           backgroundColor: "#F9F6EE",
         }}
       >
@@ -92,7 +109,7 @@ const SignInScreen = () => {
                   />
                 )}
               </Pressable>
-              <AppText fontSize={12} input={content}  width="90%"/>
+              <AppText fontSize={12} input={content} width="90%" />
             </View>
           ))}
         </View>
@@ -101,27 +118,20 @@ const SignInScreen = () => {
         <View
           style={{
             padding: 10,
-            rowGap: 10,
+            rowGap: 7,
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
           {signInOptions.map((obj, index) => (
-            <Pressable
+            <CustomPressable
+              onPress={obj.btnAction}
               key={index}
               style={{
                 backgroundColor: obj.color,
-                flexDirection: "row",
-                borderColor: "black",
                 borderWidth: signInOptions.length - 1 === index ? 0 : 1,
-                borderRadius: 20,
-                padding: 20,
-                width: "100%",
-                alignItems: "center",
-                justifyContent: "center",
-                marginHorizontal: 10,
-                gap: 5,
+                ...styles.signInBtn,
               }}
             >
               <View>
@@ -134,10 +144,10 @@ const SignInScreen = () => {
                     type="multicolor"
                     tintColor="gray"
                     fallback={
-                      <FontAwesome5
+                      <MaterialCommunityIcons
                         size={18}
                         name={obj.fallback}
-                        color="white"
+                        color={index === 0 ? "white" : "black"}
                       />
                     }
                   />
@@ -145,10 +155,10 @@ const SignInScreen = () => {
               </View>
               <AppText
                 input={obj.content}
-                fontWeight={500}
+                fontWeight={600}
                 color={index === 0 ? "white" : "black"}
               />
-            </Pressable>
+            </CustomPressable>
           ))}
         </View>
       </View>
@@ -160,7 +170,6 @@ export default SignInScreen;
 
 const styles = StyleSheet.create({
   checkbox: {
-    
     borderWidth: 2,
     borderRadius: 3,
     width: 30,
@@ -182,7 +191,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     marginHorizontal: 20,
-
-    
+  },
+  signInBtn: {
+    flexDirection: "row",
+    borderColor: "black",
+    borderRadius: 20,
+    padding: 20,
+    width: "96%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 10,
+    gap: 5,
   },
 });
