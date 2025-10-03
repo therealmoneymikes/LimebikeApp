@@ -22,10 +22,22 @@ import CountryPicker, {
   CountryCode,
 } from "react-native-country-picker-modal";
 import axios from "axios";
+// import PushNotification from "react-native-push-notification"; for Bare React Native
+import * as Notifications from "expo-notifications";
 interface UserContactDataProps {
   email?: string;
   phone?: string;
 }
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true, 
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
+});
 const OtherOptionsScreen = () => {
   const [byPhoneNumber, setByPhoneNumber] = useState<boolean>(true);
   const [countryCode, setCountryCode] = useState<CountryCode>("GB");
@@ -71,16 +83,49 @@ const OtherOptionsScreen = () => {
         console.error(`Error posting: ${error.message}`);
     }
   };
+
+  const notifyOTPTemp = async () => {
+    try {
+      const response = await axios.post("http://192.168.0.10:8000/otp", {
+        phone_number: userPhone,
+      });
+      if (response.status === 200) {
+        const data: { otp: string } = response.data;
+
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "Your OTP Code",
+            body: `Your OTP is: ${data.otp}`,
+          },
+          trigger: null, //Null = immediate
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const handlePhoneAuthFlow = async (phone: string) => {
     router.navigate({ pathname: "/(auth)/PhoneSentScreen", params: { phone } });
     try {
-      //const res = await axios.post("/auth/email_auth", { phone });
-      console.log(phone);
+      await notifyOTPTemp();
     } catch (error) {
       if (error instanceof Error)
         console.error(`Error posting: ${error.message}`);
     }
   };
+
+  const requestPermissions = async () => {
+    const { status } = await Notifications.requestPermissionsAsync();
+    if (status !== "granted") {
+      alert("Permission for notifications not granted!");
+      return false;
+    }
+    return true;
+  };
+  //For IOs we need permissions first
+  useEffect(() => {
+    requestPermissions();
+  }, []);
 
   return (
     <KeyboardAvoidingView
@@ -116,14 +161,14 @@ const OtherOptionsScreen = () => {
 
         {/* Phone number and email toggle */}
         <View style={{ flexDirection: "row", columnGap: 25 }}>
-          <CustomPressable onPress={() => setByPhoneNumber(byPhoneNumber)}>
+          <CustomPressable onPress={() => setByPhoneNumber(true)}>
             <AppText
               input="Phone number"
               fontWeight={byPhoneNumber ? "700" : "500"}
               color={byPhoneNumber ? "green" : "black"}
             />
           </CustomPressable>
-          <CustomPressable onPress={() => setByPhoneNumber(!byPhoneNumber)}>
+          <CustomPressable onPress={() => setByPhoneNumber(false)}>
             <AppText
               input="Email"
               fontWeight={byPhoneNumber ? "500" : "700"}

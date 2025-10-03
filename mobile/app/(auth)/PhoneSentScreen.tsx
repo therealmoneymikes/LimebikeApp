@@ -22,6 +22,9 @@ const PhoneSentScreen = () => {
        value,
        setValue,
      });
+
+     
+    
     return (
       <View style={styles.baseContainer}>
         <View

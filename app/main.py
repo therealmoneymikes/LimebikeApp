@@ -1,8 +1,10 @@
 # main.py
 from contextlib import asynccontextmanager
+import random
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.openapi.docs import get_swagger_ui_html
+from pydantic import BaseModel
 from services.authz import AuthzService
 from utils.redis.redis_cache import RedisClient, RedisProxy
 from services.rbac_interface import RBAC
@@ -98,3 +100,16 @@ def custom_swagger_ui(creds: HTTPBasicCredentials = Depends(verify_creds)):
 def get_open_api_protected(creds: HTTPBasicCredentials = Depends(verify_creds)):
     """ Custom Open API hook to lock /openapi.json call to swagger UI"""
     return app.openapi()
+
+
+class OTPRequest(BaseModel):
+    phone_number: str
+    
+@app.post("/otp")
+def get_otp_test(request: OTPRequest):
+    
+    phone = request.phone_number
+    random_value = random.randint(0, 999999)
+    str_random_value = f"{random_value:06}"
+    print(str_random_value)
+    return {"otp": str_random_value, "phone": phone}
