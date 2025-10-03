@@ -28,15 +28,35 @@ interface SignInButtonProps {
   color?: string;
 }
 const SignInScreen = () => {
-  const [isSelected, setIsSelected] = useState<boolean>(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [offerOption, setOfferOption] = useState<boolean>(false);
+  const [policyOption, setPolicyOption] = useState<boolean>(false);
 
   const otherOptionsAction = (data?: object) => {
     router.push("/(auth)/OtherOptionsScreen");
   };
+
+  const toggleCheckbox = (currentIndex: number): void => {
+    setSelectedIndex((prev) => (prev === currentIndex ? null : currentIndex));
+  };
+
+  const handlePolicyBox = (currentIndex: number): void => {
+    setPolicyOption(!(currentIndex === selectedIndex));
+  };
+
+  const handleOfferBox = (currentIndex: number): void => {
+    setOfferOption(!(currentIndex === selectedIndex));
+  };
   const checkBoxMenu = [
-    "Send me offers and news from Lime via email and other electronic messages",
-    "I agree to Lime's User Agreement and Privacy Policy",
+    {
+      content:
+        "Send me offers and news from Lime via email and other electronic messages",
+      action: handleOfferBox,
+    },
+    {
+      content: "I agree to Lime's User Agreement and Privacy Policy",
+      action: handlePolicyBox,
+    },
   ];
   const signInOptions: SignInButtonProps[] = [
     {
@@ -62,10 +82,6 @@ const SignInScreen = () => {
     },
   ];
 
-  const toggleCheckbox = (currentIndex: number): void => {
-    setSelectedIndex((prev) => (prev === currentIndex ? null : currentIndex));
-  };
-
   return (
     <View>
       {/* Checkboxes */}
@@ -87,10 +103,13 @@ const SignInScreen = () => {
         }}
       >
         <View style={styles.offersContainer}>
-          {checkBoxMenu.map((content, index) => (
+          {checkBoxMenu.map((obj, index) => (
             <View style={styles.checkBoxOptionContainer} key={index}>
               <Pressable
-                onPress={() => toggleCheckbox(index)}
+                onPress={() => {
+                  toggleCheckbox(index);
+                  obj.action(index);
+                }}
                 style={[
                   styles.checkbox,
                   {
@@ -109,24 +128,18 @@ const SignInScreen = () => {
                   />
                 )}
               </Pressable>
-              <AppText fontSize={12} input={content} width="90%" />
+              <AppText fontSize={12} input={obj.content} width="90%" />
             </View>
           ))}
         </View>
 
         {/* Buttons */}
         <View
-          style={{
-            padding: 10,
-            rowGap: 7,
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          style={[styles.btnContainer, { opacity: !policyOption ? 0.4 : 1 }]}
         >
           {signInOptions.map((obj, index) => (
             <CustomPressable
-              onPress={obj.btnAction}
+              onPress={!policyOption ? () => console.log("") : obj.btnAction}
               key={index}
               style={{
                 backgroundColor: obj.color,
@@ -202,5 +215,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginHorizontal: 10,
     gap: 5,
+  },
+  btnContainer: {
+    padding: 10,
+    rowGap: 7,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

@@ -5,8 +5,15 @@ import { Stack } from "expo-router";
 const AuthLayout = () => {
   return (
     <Stack>
-      <Stack.Screen name="OtherOptionsScreen" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="OtherOptionsScreen"
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="SignInScreen" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="CountryPickerScreen"
+        options={{ headerShown: false }}
+      />
     </Stack>
   );
 };
