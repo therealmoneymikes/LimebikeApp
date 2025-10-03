@@ -1,5 +1,5 @@
 import { Alert, Linking, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import CustomPressable from "@/components/BaseComponents/CustomPressable";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
@@ -9,6 +9,9 @@ import colours from "@/config/colours";
 const EmailSentScreen = () => {
   const data = useLocalSearchParams();
 
+
+
+  const [optValue, setOtpValue] = useState<string>(data.otp as string)
   const openEmailApp = async () => {
     try {
       const url = "mailto:";

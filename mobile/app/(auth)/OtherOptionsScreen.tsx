@@ -73,14 +73,40 @@ const OtherOptionsScreen = () => {
     setUserPhone(text);
   };
 
-  const handleEmailAuthFlow = async (email: string) => {
-    router.navigate({ pathname: "/(auth)/EmailSentScreen", params: { email } });
+  const getEmailOTPTemp = async () => {
     try {
-      // const res = await axios.post("/auth/email_auth", { email });
-      console.log(email);
+      const response = await axios.post(
+        "http://192.168.0.10:8000/email_otp/send",{ to: userEmail}
+      );
+      if (response.status === 200) {
+        const data: { otp: string } = response.data;
+
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "Your email OTP code",
+            body: `Your OTP is: ${data.otp}`,
+          },
+          trigger: null,
+        });
+        setOtpValue(data.otp);
+        return data.otp;
+      }
     } catch (error) {
       if (error instanceof Error)
         console.error(`Error posting: ${error.message}`);
+    }
+  };
+  const handleEmailAuthFlow = async (email: string) => {
+    try {
+      const otp = await getEmailOTPTemp();
+      if (!otp) return;
+
+      router.navigate({
+        pathname: "/(auth)/EmailSentScreen",
+        params: { email, otp },
+      });
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -91,7 +117,7 @@ const OtherOptionsScreen = () => {
       });
       if (response.status === 200) {
         const data: { otp: string } = await response.data;
-        
+
         await Notifications.scheduleNotificationAsync({
           content: {
             title: "Your OTP Code",
@@ -99,9 +125,9 @@ const OtherOptionsScreen = () => {
           },
           trigger: null, //Null = immediate
         });
-        
+
         setOtpValue(data.otp);
-        return data.otp
+        return data.otp;
       }
     } catch (error) {
       console.error(error);
@@ -110,14 +136,12 @@ const OtherOptionsScreen = () => {
   const handlePhoneAuthFlow = async (phone: string) => {
     try {
       const otp = await notifyOTPTemp();
-      if(!otp) return 
+      if (!otp) return;
 
-     
       router.navigate({
-          pathname: "/(auth)/PhoneSentScreen",
-          params: { phone, otp},
-        });
-      
+        pathname: "/(auth)/PhoneSentScreen",
+        params: { phone, otp },
+      });
     } catch (error) {
       if (error instanceof Error)
         console.error(`Error posting: ${error.message}`);
