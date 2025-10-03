@@ -10,10 +10,8 @@ const AuthLayout = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="SignInScreen" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="CountryPickerScreen"
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="EmailSentScreen" options={{ headerShown: false }} />
+      <Stack.Screen name="PhoneSentScreen" options={{ headerShown: false }} />
     </Stack>
   );
 };

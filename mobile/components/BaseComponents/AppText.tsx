@@ -3,7 +3,7 @@ import React from "react";
 
 interface AppTextProps {
   input: string;
-  style?: StyleProp<TextProps>;
+  style?: StyleProp<TextStyle>;
   fontSize?: number;
   color?: string;
   fontWeight?: TextStyle["fontWeight"],
