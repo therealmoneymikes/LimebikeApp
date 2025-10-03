@@ -5,27 +5,25 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import Constants from "expo-constants";
 import AppText from "@/components/BaseComponents/AppText";
-import colours from "@/config/colours"
+import colours from "@/config/colours";
 const EmailSentScreen = () => {
   const data = useLocalSearchParams();
 
-
-  const openEmailApp = async() => {
+  const openEmailApp = async () => {
     try {
-        const url = "mailto:";
-        const supported = await Linking.canOpenURL(url)
+      const url = "mailto:";
+      const supported = await Linking.canOpenURL(url);
 
-        if (supported){
-            await Linking.openURL(url)
-        } else {
-            Alert.alert("No email app found on this device")
-        }
-    } catch (error){
-        Alert.alert("Error", "Unable to open email app")
-        router.navigate("/(auth)/OtherOptionsScreen")
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        Alert.alert("No email app found on this device");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Unable to open email app");
+      router.navigate("/(auth)/OtherOptionsScreen");
     }
-
-  }
+  };
   return (
     <View style={styles.baseContainer}>
       <View
@@ -122,7 +120,7 @@ const EmailSentScreen = () => {
       </View>
       {/* Action Buttons - Open or Resend */}
       <View style={{ marginBottom: 30 }}>
-        <View style={{ marginBottom: 20 }}>
+        <View style={{ marginBottom: 15 }}>
           <CustomPressable
             onPress={() => openEmailApp()}
             style={{

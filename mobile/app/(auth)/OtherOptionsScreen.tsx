@@ -31,7 +31,6 @@ interface UserContactDataProps {
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true, 
     shouldPlaySound: false,
     shouldSetBadge: false,
     shouldShowBanner: true,
@@ -48,6 +47,7 @@ const OtherOptionsScreen = () => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [userPhone, setUserPhone] = useState<string>("");
   const [userEmail, setUserEmail] = useState<string>("");
+  const [otpValue, setOtpValue] = useState<string>("");
 
   const [withCountryNameButton, setWithCountryNameButton] =
     useState<boolean>(false);
@@ -90,8 +90,8 @@ const OtherOptionsScreen = () => {
         phone_number: userPhone,
       });
       if (response.status === 200) {
-        const data: { otp: string } = response.data;
-
+        const data: { otp: string } = await response.data;
+        
         await Notifications.scheduleNotificationAsync({
           content: {
             title: "Your OTP Code",
@@ -99,15 +99,25 @@ const OtherOptionsScreen = () => {
           },
           trigger: null, //Null = immediate
         });
+        
+        setOtpValue(data.otp);
+        return data.otp
       }
     } catch (error) {
       console.error(error);
     }
   };
   const handlePhoneAuthFlow = async (phone: string) => {
-    router.navigate({ pathname: "/(auth)/PhoneSentScreen", params: { phone } });
     try {
-      await notifyOTPTemp();
+      const otp = await notifyOTPTemp();
+      if(!otp) return 
+
+     
+      router.navigate({
+          pathname: "/(auth)/PhoneSentScreen",
+          params: { phone, otp},
+        });
+      
     } catch (error) {
       if (error instanceof Error)
         console.error(`Error posting: ${error.message}`);
