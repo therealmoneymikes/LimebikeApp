@@ -1,4 +1,12 @@
-import { StyleSheet, Text, TextInput, View, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import AppText from "@/components/BaseComponents/AppText";
 import {
@@ -20,6 +28,7 @@ const OtherOptionsScreen = () => {
   const [countryFlag, setCountryFlag] = useState<string>("🇬🇧");
   const [country, setCountry] = useState<Country | null>(null);
   const [showPicker, setShowPicker] = useState<boolean>(false);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const [withCountryNameButton, setWithCountryNameButton] =
     useState<boolean>(false);
@@ -34,9 +43,11 @@ const OtherOptionsScreen = () => {
 
   useEffect(() => {
     setCountryFlag("🇬🇧");
+    setCallingCode("44");
   }, []);
 
   return (
+    <KeyboardAvoidingView style={{flex: 1}} behavior={Platform.OS === "ios" ? "padding": "height"}>
     <View style={styles.baseContainer}>
       {/* Back button */}
       <View
@@ -47,11 +58,12 @@ const OtherOptionsScreen = () => {
           width: 40,
         }}
       >
-        <CustomPressable onPress={() => {
-          //router.navigate("/(auth)/SignInScreen")
-          router.back()
-          console.log("Navigate from Other Options Screen to SignInUpScreen")
-        }}>
+        <CustomPressable
+          onPress={() => {
+            router.navigate("/(auth)/SignInScreen");
+            console.log("Navigate from Other Options Screen to SignInUpScreen");
+          }}
+        >
           <MaterialCommunityIcons name="arrow-left" color="black" size={20} />
         </CustomPressable>
       </View>
@@ -81,23 +93,8 @@ const OtherOptionsScreen = () => {
 
       {/* Input Window phone number or email */}
       {/* Country Flag Button opens a screen with all countries and area codes (Recreate) */}
-      <View>
-        {byPhoneNumber && (
-          <View>
-            <CountryPicker
-              withFilter
-              withFlag={true}
-              withAlphaFilter
-              withCallingCode={false}
-              countryCode={countryCode}
-              onSelect={onSelect}
-              visible={showPicker}
-              onClose={() => {
-                setShowPicker(false);
-              }}
-              withCountryNameButton={false}
-              withFlagButton={false}
-            />
+      <View style={{flex: 1, justifyContent: "flex-start"}}>
+        {byPhoneNumber ? (
             <View
               style={{
                 flexDirection: "row",
@@ -110,9 +107,19 @@ const OtherOptionsScreen = () => {
                 onPress={() => setShowPicker(true)}
                 style={{ flexDirection: "row", alignItems: "center" }}
               >
-                <Image
-                  source={{ uri: countryFlag }}
-                  style={{ width: 30, height: 20 }}
+                <CountryPicker
+                  withFilter
+                  withFlag={true}
+                  withAlphaFilter
+                  withCallingCode={false}
+                  countryCode={countryCode}
+                  onSelect={onSelect}
+                  visible={showPicker}
+                  onClose={() => {
+                    setShowPicker(false);
+                  }}
+                  withCountryNameButton={false}
+                  withFlagButton={true}
                 />
                 <MaterialCommunityIcons
                   name={showPicker ? "chevron-up" : "chevron-down"}
@@ -123,16 +130,62 @@ const OtherOptionsScreen = () => {
               <TextInput
                 onChangeText={(text) => console.log(text)}
                 placeholder="Enter phone number"
+                keyboardType={"phone-pad"}
                 placeholderTextColor="gray"
                 style={{
                   height: 40,
+                  flex: 1,
                 }}
               />
             </View>
-          </View>
+          
+        ) : 
+        
+        (
+        /* By Email Option */
+            <View
+              style={{
+                flexDirection: "row",
+                height: 40,
+                alignItems: "center",
+                justifyContent: "space-between",
+                paddingHorizontal: 6,
+                borderBottomWidth: 1,
+                borderBottomColor: isFocused ? "#58ED8D" : "gray",
+              }}
+            >
+              <TextInput
+                placeholder="Enter email"
+                placeholderTextColor="gray"
+                onChangeText={(text) => console.log(text)}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                keyboardType="email-address"
+              />
+              <MaterialCommunityIcons name="close" color="gray" size={22} />
+            </View>
         )}
+        </View>
+
+        {/* Next Button */}
+        <View style={{marginBottom: 20}}>
+          <CustomPressable
+            onPress={() => console.log("Next pressed")}
+            style={{
+              flexDirection: "row",
+              height: 57,
+              borderRadius: 15,
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#58ED8D",
+            }}
+          >
+            <AppText input="Next" fontWeight="700" />
+          </CustomPressable>
+        </View>
       </View>
-    </View>
+      
+    </KeyboardAvoidingView>
   );
 };
 
