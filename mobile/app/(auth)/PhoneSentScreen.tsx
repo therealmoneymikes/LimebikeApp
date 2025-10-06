@@ -25,8 +25,8 @@ Notifications.setNotificationHandler({
 });
 const PhoneSentScreen = () => {
   const data = useLocalSearchParams();
-  console.log("OTOP", data.otp)
-  console.log("PHONE", data.phone)
+  console.log("OTOP", data.otp);
+  console.log("PHONE", data.phone);
 
   const [value, setValue] = useState("");
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
@@ -35,31 +35,28 @@ const PhoneSentScreen = () => {
     setValue,
   });
   const [otpValue, setOtpValue] = useState<string>(data.otp as string);
-    const notifyOTPTemp = async () => {
-      try {
-        const response = await axios.post("http://192.168.0.10:8000/otp", {
-          phone_number: data.phone,
+  const notifyOTPTemp = async () => {
+    try {
+      const response = await axios.post("http://192.168.0.10:8000/otp", {
+        phone_number: data.phone,
+      });
+      if (response.status === 200) {
+        const data: { otp: string } = response.data;
+
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: "Your OTP Code",
+            body: `Your OTP is: ${data.otp}`,
+          },
+          trigger: null, //Null = immediate
         });
-        if (response.status === 200) {
-          const data: { otp: string } = response.data;
-        
-
-          await Notifications.scheduleNotificationAsync({
-            content: {
-              title: "Your OTP Code",
-              body: `Your OTP is: ${data.otp}`,
-            },
-            trigger: null, //Null = immediate
-          });
-          setOtpValue(data.otp)
-          return data.otp
-        }
-      } catch (error) {
-        console.error(error);
+        setOtpValue(data.otp);
+        return data.otp;
       }
-    };
-
-  
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <View style={styles.baseContainer}>
@@ -125,19 +122,17 @@ const PhoneSentScreen = () => {
         </CustomPressable>
       </View>
 
-      {
+      
         <View style={{ marginBottom: 15 }}>
           <CustomPressable
             onPress={() => {
-              if (value.length === 6 && value === data.otp){
-                 router.navigate("/(auth)/OtherOptionsScreen")
-                 }
-               else {
+              if (value.length === 6 && value === data.otp) {
+                router.navigate("/(auth)/OtherOptionsScreen");
+              } else {
                 console.log(value);
-                console.log(otpValue)
-               }
-            }
-            }
+                console.log(otpValue);
+              }
+            }}
             style={{
               flexDirection: "row",
               height: 57,
@@ -147,11 +142,11 @@ const PhoneSentScreen = () => {
               backgroundColor: value.length === 6 ? "#58ED8D" : "gray",
             }}
           >
-            <AppText input="Open Email App" fontWeight="700" />
+            <AppText input="Next" fontWeight="700" />
           </CustomPressable>
         </View>
-      }
-      <View></View>
+      
+    
     </View>
   );
 };

@@ -9,9 +9,7 @@ import colours from "@/config/colours";
 const EmailSentScreen = () => {
   const data = useLocalSearchParams();
 
-
-
-  const [optValue, setOtpValue] = useState<string>(data.otp as string)
+  const [optValue, setOtpValue] = useState<string>(data.otp as string);
   const openEmailApp = async () => {
     try {
       const url = "mailto:";
@@ -59,7 +57,7 @@ const EmailSentScreen = () => {
       <View style={{ gap: 50, flex: 1 }}>
         {/* Step 1 Instruction */}
         <View
-          style={{ gap: 5, alignItems: "center", justifyContent: "center" }}
+          style={{ gap: 10, alignItems: "center", justifyContent: "center" }}
         >
           <View
             style={{
@@ -83,7 +81,7 @@ const EmailSentScreen = () => {
 
         {/* Step 2 Instruction */}
         <View
-          style={{ gap: 5, alignItems: "center", justifyContent: "center" }}
+          style={{ gap: 10, alignItems: "center", justifyContent: "center" }}
         >
           <View
             style={{
@@ -109,7 +107,12 @@ const EmailSentScreen = () => {
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           <AppText input="Having trouble with your link?" fontSize={16} />
           <CustomPressable
-            onPress={() => console.log("Go to Enter Email Code Screen")}
+            onPress={() =>
+              router.navigate({
+                pathname: "/(auth)/EmailEnterCodeScreen",
+                params: { email: data.email, otp: data.otp },
+              })
+            }
           >
             <AppText
               input="Enter code"

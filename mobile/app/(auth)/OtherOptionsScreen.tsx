@@ -297,7 +297,7 @@ const OtherOptionsScreen = () => {
         </View>
 
         {/* Next Button */}
-        <View style={{ marginBottom: 20 }}>
+        <View style={{ marginBottom: 15 }}>
           <CustomPressable
             onPress={() =>
               userEmail && !userPhone
