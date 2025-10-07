@@ -131,7 +131,7 @@ const PhoneSentScreen = () => {
         <CustomPressable
           onPress={() => {
             if (value.length === 6 && value === data.otp) {
-              router.navigate("(map)/map");
+              router.navigate("(map)/Map");
             } else {
               console.log(value);
               console.log(otpValue);

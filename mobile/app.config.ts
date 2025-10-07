@@ -6,7 +6,8 @@ export default {
         name: "limebikeapp",
         slug: "limebikeapp",
         extra: {
-            mapboxAccessToken: process.env.MAPBOX_TOKEN
+            mapboxAccessToken: process.env.MAPBOX_TOKEN,
+            appVersion: process.env.APP_VERSION
         }
     }
 }
