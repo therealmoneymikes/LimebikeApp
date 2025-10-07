@@ -5,6 +5,8 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.openapi.docs import get_swagger_ui_html
 from pydantic import BaseModel
+from schemas.routes.phone import OTPRequest
+from utils.helpers import generate_otp
 from services.authz import AuthzService
 from utils.redis.redis_cache import RedisClient, RedisProxy
 from services.rbac_interface import RBAC
@@ -15,6 +17,7 @@ import secrets
 from routes.bikes import router as bikerouter
 from routes.me import router as merouter
 from routes.users import router as userrouter
+from routes.email_otp import router as email_otp_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -73,6 +76,7 @@ app = FastAPI(
 app.include_router(bikerouter)
 app.include_router(merouter)
 app.include_router(userrouter)
+app.include_router(email_otp_router)
 
 security = HTTPBasic()
 
@@ -102,14 +106,11 @@ def get_open_api_protected(creds: HTTPBasicCredentials = Depends(verify_creds)):
     return app.openapi()
 
 
-class OTPRequest(BaseModel):
-    phone_number: str
-    
+
 @app.post("/otp")
 def get_otp_test(request: OTPRequest):
     
     phone = request.phone_number
-    random_value = random.randint(0, 999999)
-    str_random_value = f"{random_value:06}"
-    print(str_random_value)
-    return {"otp": str_random_value, "phone": phone}
+    response = generate_otp()
+    print(response)
+    return {"otp": response, "phone": phone}

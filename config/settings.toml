@@ -28,6 +28,7 @@ SPICEDB_INSECURE_CONF = "True"
 REDIS_URL = "redis://localhost:6379/0"
 
 
+
 [development.database]
 HOST = "localhost"
 PORT = 5432

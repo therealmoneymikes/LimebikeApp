@@ -13,6 +13,7 @@ import {
 } from "react-native-confirmation-code-field";
 import axios from "axios";
 import * as Notifications from "expo-notifications";
+import * as Clipboard from "expo-clipboard";
 const CELL_COUNT = 6;
 
 Notifications.setNotificationHandler({
@@ -73,6 +74,10 @@ const PhoneSentScreen = () => {
             router.navigate("/(auth)/OtherOptionsScreen");
             console.log("Navigate from Other Options Screen to SignInUpScreen");
           }}
+          // onLongPress={async () => {
+          //   const str = await Clipboard.getStringAsync()
+          //   setValue(str)
+          // }}
         >
           <MaterialCommunityIcons name="arrow-left" color="black" size={20} />
         </CustomPressable>
@@ -122,31 +127,28 @@ const PhoneSentScreen = () => {
         </CustomPressable>
       </View>
 
-      
-        <View style={{ marginBottom: 15 }}>
-          <CustomPressable
-            onPress={() => {
-              if (value.length === 6 && value === data.otp) {
-                router.navigate("/(auth)/OtherOptionsScreen");
-              } else {
-                console.log(value);
-                console.log(otpValue);
-              }
-            }}
-            style={{
-              flexDirection: "row",
-              height: 57,
-              borderRadius: 15,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: value.length === 6 ? "#58ED8D" : "gray",
-            }}
-          >
-            <AppText input="Next" fontWeight="700" />
-          </CustomPressable>
-        </View>
-      
-    
+      <View style={{ marginBottom: 15 }}>
+        <CustomPressable
+          onPress={() => {
+            if (value.length === 6 && value === data.otp) {
+              router.navigate("(map)/map");
+            } else {
+              console.log(value);
+              console.log(otpValue);
+            }
+          }}
+          style={{
+            flexDirection: "row",
+            height: 57,
+            borderRadius: 15,
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: value.length === 6 ? "#58ED8D" : "gray",
+          }}
+        >
+          <AppText input="Next" fontWeight="700" />
+        </CustomPressable>
+      </View>
     </View>
   );
 };

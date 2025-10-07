@@ -75,7 +75,7 @@ const EmailEnterCodeScreen = () => {
           <CustomPressable
             onPress={() => {
               if (emailOTP.length === 6 && emailOTP === data.otp) {
-                router.navigate("/(auth)/OtherOptionsScreen");
+                router.navigate("(map)/map");
               } else {
                 console.log(emailOTP);
               }

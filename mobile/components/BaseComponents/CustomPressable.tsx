@@ -13,17 +13,21 @@ interface CustomPressableProps {
   onPress: () => void;
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
+  onLongPress?: () => void
 }
 
 const CustomPressable = ({
   onPress,
   children,
   style,
+  onLongPress,
   ...props
 }: CustomPressableProps) => {
   return (
     <Pressable
+    
       onPress={onPress}
+      onLongPress={onLongPress}
       style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1.0 }, style]}
       {...props}
     >

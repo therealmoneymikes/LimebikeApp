@@ -6,6 +6,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import Constants from "expo-constants";
 import AppText from "@/components/BaseComponents/AppText";
 import colours from "@/config/colours";
+import * as Clipboard from "expo-clipboard"
 const EmailSentScreen = () => {
   const data = useLocalSearchParams();
 
@@ -107,12 +108,14 @@ const EmailSentScreen = () => {
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           <AppText input="Having trouble with your link?" fontSize={16} />
           <CustomPressable
-            onPress={() =>
+            onPress={async () => {
+
+              await Clipboard.setStringAsync(data.otp as string)
               router.navigate({
                 pathname: "/(auth)/EmailEnterCodeScreen",
                 params: { email: data.email, otp: data.otp },
-              })
-            }
+              });
+            }}
           >
             <AppText
               input="Enter code"

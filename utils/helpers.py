@@ -4,6 +4,7 @@
 
 
 
+import random
 import uuid
 
 from config import namespaces
@@ -41,7 +42,12 @@ def normalize_phone_number(phone: str, region: str = "GB") -> str:
             raise ValueError(f"Could not parse phone number: {phone}") from e
         
         
-        
+
+
+def generate_otp(): 
+    random_value = random.randint(0, 999999)
+    str_random_value = f"{random_value:06}"
+    return str_random_value      
 """ 
     🔹 When to use raise ... from e
 
