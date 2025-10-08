@@ -30,6 +30,7 @@
     "expo-status-bar": "~3.0.8",
     "expo-symbols": "^1.0.7",
     "expo-web-browser": "~15.0.7",
+    "haversine": "^1.1.1",
     "react": "19.1.0",
     "react-async-hook": "^4.0.0",
     "react-dom": "19.1.0",
@@ -37,7 +38,9 @@
     "react-native-confirmation-code-field": "^8.0.1",
     "react-native-country-picker-modal": "^2.0.0",
     "react-native-gesture-handler": "^2.28.0",
+    "react-native-google-places-autocomplete": "^2.5.7",
     "react-native-maps": "1.20.1",
+    "react-native-modal": "^14.0.0-rc.1",
     "react-native-push-notification": "^8.1.1",
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "~5.6.0",
@@ -47,6 +50,7 @@
     "world-countries": "^5.1.0"
   },
   "devDependencies": {
+    "@types/haversine": "^1.1.8",
     "@types/react": "~19.1.0",
     "@types/react-native-push-notification": "^8.1.4",
     "react-test-renderer": "19.1.0",
