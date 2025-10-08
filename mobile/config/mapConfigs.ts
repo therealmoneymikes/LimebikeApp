@@ -336,7 +336,7 @@ export default {
           lightness: 25,
         },
         {
-          weight: "0.01",
+          weight: "1",
         },
       ],
     },
