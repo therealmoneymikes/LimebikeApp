@@ -114,3 +114,8 @@ def get_otp_test(request: OTPRequest):
     response = generate_otp()
     print(response)
     return {"otp": response, "phone": phone}
+
+
+@app.get("/user_mins")
+def get_user_mins_test():
+    return random.randint(1, 200)
