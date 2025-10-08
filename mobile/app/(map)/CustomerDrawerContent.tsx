@@ -10,6 +10,8 @@ import { DrawerActions } from "@react-navigation/native";
 import Constants from "expo-constants";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colours from "@/config/colours";
+import { AD_BULLETS } from "@/utils/data";
+import { router } from "expo-router";
 
 interface MenuItemsProps {
   option: string;
@@ -26,17 +28,48 @@ const CustomerDrawerContent = (props: DrawerContentComponentProps) => {
 
   const appVersion = Constants.expoConfig?.extra?.appVersion;
 
+  const handleShowWallet = () => {
+    setShowWallet(true);
+    router.navigate("(menu)/WalletScreen")
+    props.navigation.closeDrawer();
+  };
+
+  const handleShowHistory = () => {
+    setShowHistory(true);
+    props.navigation.closeDrawer();
+  };
+
+  const handleShowSafety = () => {
+    setShowSafety(true);
+    props.navigation.closeDrawer();
+  };
+
+  const handleShowDonation = () => {
+    setShowDonation(true);
+    props.navigation.closeDrawer();
+  };
+
+  const handleShowHelp = () => {
+    setShowHelp(true);
+    props.navigation.closeDrawer();
+  };
+
+  const handleShowSettings = () => {
+    setShowSettings(true);
+    props.navigation.closeDrawer();
+  };
+  
   const MENU_ITEMS: MenuItemsProps[] = [
     {
       option: "Wallet",
       icon: "wallet-bifold",
-      action: () => setShowWallet(!showWallet),
+      action: handleShowWallet,
     },
-    { option: "History", icon: "history" },
-    { option: "Safety Center", icon: "shield-check" },
-    { option: "Donation", icon: "heart" },
-    { option: "Help", icon: "chat-question" },
-    { option: "Settings", icon: "cog" },
+    { option: "History", icon: "history", action: handleShowHistory },
+    { option: "Safety Center", icon: "shield-check", action: handleShowSafety },
+    { option: "Donation", icon: "heart", action: handleShowDonation },
+    { option: "Help", icon: "chat-question", action: handleShowHelp },
+    { option: "Settings", icon: "cog", action: handleShowSettings },
     {
       option: "Close Menu",
       icon: "close",
@@ -44,11 +77,7 @@ const CustomerDrawerContent = (props: DrawerContentComponentProps) => {
     },
   ];
 
-  const AD_BULLETS = [
-    "Discounted minutes",
-    "Unlimited free unlocks",
-    "No subscription required",
-  ];
+
   return (
     <DrawerContentScrollView
       {...props}

@@ -1,27 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Dimensions, Alert, Linking } from "react-native";
-import MapView, { Marker, Region, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, {
+  Marker,
+  Region,
+  PROVIDER_GOOGLE,
+  MapStyleElement,
+} from "react-native-maps";
 import * as Location from "expo-location";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Constants from "expo-constants";
 import CustomPressable from "@/components/BaseComponents/CustomPressable";
-import { DrawerScreenProps } from "@react-navigation/drawer";
-import { DrawerActions } from "@react-navigation/native";
-import { DrawerParamList } from "./_layout";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
+import mapConfigs from "@/config/mapConfigs";
+import AppText from "@/components/BaseComponents/AppText";
+
 const { width, height } = Dimensions.get("window");
 
-type Props = DrawerScreenProps<DrawerParamList, "index">;
+//https://snazzymaps.com
+export default function Map() {
+  const navigation = useNavigation();
 
-export default function Map({ navigation }: Props) {
   const openDrawer = () => {
-    // console.log("Navigation object:", navigation);
-    // console.log("Trying to open drawer...");
     navigation.dispatch(DrawerActions.openDrawer());
   };
 
   const [hasLocationPermssion, setHasLocationPermission] =
     useState<boolean>(false);
   const [userLocation, setUserLocation] = useState<Region | null>(null);
+  const [mapStyle, setMapStyle] = useState<MapStyleElement[]>([]);
 
   const requestLocationPermission = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -43,8 +49,6 @@ export default function Map({ navigation }: Props) {
       distanceInterval: 10,
     });
     const { latitude, longitude } = location.coords;
-
-    console.log(`Lat: ${latitude}, Lon: ${longitude}`);
 
     setUserLocation({
       latitude,
@@ -75,6 +79,7 @@ export default function Map({ navigation }: Props) {
         showsMyLocationButton={true}
         showsBuildings={true}
         showsCompass={true}
+        customMapStyle={mapStyle}
       >
         {userLocation && (
           <Marker
@@ -87,6 +92,7 @@ export default function Map({ navigation }: Props) {
           />
         )}
       </MapView>
+      {/* Top Button Panel */}
       <View style={styles.buttonPanel}>
         <View style={styles.actionBtnContainer}>
           <CustomPressable style={styles.actionBtn} onPress={openDrawer}>
@@ -101,6 +107,59 @@ export default function Map({ navigation }: Props) {
           </CustomPressable>
         </View>
       </View>
+
+      {/* Theme Panel */}
+      <View
+        style={{
+          position: "absolute",
+          right: 20,
+          bottom: "20%",
+          zIndex: 10,
+          alignItems: "center",
+          justifyContent: "center",
+          rowGap: 20,
+          backgroundColor: "#B8F493",
+          height: 200,
+          width: 60,
+          borderRadius: 20,
+        }}
+      >
+        {/* Navy Blue */}
+
+        <View style={{ gap: 2 }}>
+          <CustomPressable
+            style={[styles.actionBtn, { backgroundColor: "navy" }]}
+            onPress={() => setMapStyle(mapConfigs.deepBlue)}
+          >
+            <MaterialCommunityIcons name="brush" size={24} color="#fff" />
+          </CustomPressable>
+          {/* <AppText input="Navy" fontWeight={300} color="white" /> */}
+        </View>
+
+        {/* Gray Scale*/}
+        <View style={{ gap: 2 }}>
+          <CustomPressable
+            style={[styles.actionBtn, { backgroundColor: "gray" }]}
+            onPress={() => setMapStyle(mapConfigs.subtleGrayscale)}
+          >
+            <MaterialCommunityIcons name="brush" size={24} color="#fff" />
+          </CustomPressable>
+          {/* <AppText input="Grayscale" fontWeight={300} color="white" /> */}
+        </View>
+
+        {/* Ultralight*/}
+        <View style={{ gap: 2 }}>
+          <CustomPressable
+            style={[styles.actionBtn, { backgroundColor: "#883b20" }]}
+            onPress={() => setMapStyle(mapConfigs.marsAnalog)}
+          >
+            <MaterialCommunityIcons name="brush" size={24} color="#fff" />
+          </CustomPressable>
+          {/* <AppText input="Grayscale" fontWeight={300} color="white" /> */}
+        </View>
+      </View>
+      {/* Bottom Tabs */}
+      <View></View>
     </View>
   );
 }
@@ -134,7 +193,7 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "gray",
     borderRadius: 20,
+    backgroundColor: "gray",
   },
 });
